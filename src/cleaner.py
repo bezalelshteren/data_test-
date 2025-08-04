@@ -12,12 +12,12 @@ class clean_the_data:
 
 
     def split_the_data_by_biased(self):
-        since = ["@", "!", "#", "$", "?", ":", ",", ".","/","_"]
-        self.data_table = self.data_table.replace(since, " ")
+        # since = ["@", "!", "#", "$", "?", ":", ",", ".","/","_"]
+        # self.data_table = self.data_table.replace(since, " ")
         self.isnt_anti = self.data_table[self.data_table["Biased"]==0]
         self.is_anti =self.data_table[self.data_table["Biased"]==1]
-        print(self.isnt_anti)
-        print(self.is_anti)
+        # print(self.isnt_anti)
+        # print(self.is_anti)
         return self.isnt_anti,self.is_anti
 
 
@@ -54,9 +54,9 @@ class clean_the_data:
                 the_most_len = t
 
             len_of_all_messeges_in_is += len(t["Text"])
-            print(len_of_all_messeges_in_is)
+            # print(len_of_all_messeges_in_is)
             counter += 1
-            print(counter)
+            # print(counter)
         print("--------------------")
         print(len_of_all_messeges_in_is / counter)
         print(the_most_len["Text"])
@@ -64,25 +64,52 @@ class clean_the_data:
 
 
     def return_the_most_len_mess(self):
-        self.data_table["len"] = len(self.data_table[self.data_table["Text"]])
-        p = self.data_table.sort_values(by=["len"])
-        # return self.isnt_anti
-        return p
-        # print(p)
+        y = [self.data_table,self.is_anti,self.isnt_anti]
+        oppo = []
+        for i in y:
+            count = 0
+            len1 = 0
+            the_lengest =[]
+            dict_to_check = {}
+            for idx, tweet in enumerate(i["Text"]):
+                count += len(tweet.split())
+                length = len([word for word in tweet])
+                len1+=length
+                dict_to_check[length] = tweet
+            for i in range(3):
+                max_len = max(dict_to_check)
+                the_lengest.append(dict_to_check[max_len])
+                dict_to_check.pop(max_len)
+            rt = len1/count
+            oppo.append(the_lengest)
+            oppo.append("==============================================================")
+            oppo.append(rt)
+        return oppo
+
+
 
     def return_the_most_common(self):
-        max = 0
+        max1 = []
+        t = 0
         dict_of_common = {}
+        dict_of_upper = {}
         op = self.data_table["Text"].to_string().split(" ")
         for i in op:
+            iii = op.is_lower().sum()
+            t+= iii
             if i not in dict_of_common:
                 dict_of_common[i] = 1
             elif i in dict_of_common:
                 dict_of_common[i] += 1
-        # for i,p in enumerate(dict_of_common):
-        #     if
+        for i in range(10):
+            pp = max(dict_of_common.values())
+            max1.append(dict_of_common[pp])
+            # dict_of_common.pop(pp)
+        print(t)
+        return max1
 
-        return dict_of_common
+    # def chainge_to_json(self):
+    #     with open("cleaned_dataset_tweets.csv","W")as file:
 
 
     # def return_bisike_info(self):
@@ -90,18 +117,9 @@ class clean_the_data:
 
 
 c = clean_the_data()
-# c.clean_data_from_since()
-print(c.split_the_data_by_biased())
-# print(c.return_the_most_len_mess())
-# print(c.return_the_most_common())
-# print(c.data_table)
-# c.return_the_most_common()
-# c.m()
-# c.return_bisike_info()
-# c.clean_data_from_since()
-# print(999,cleaned_data.data_table.head(50))
-# print(777,cleaned_data.data_table.info())
-# print(555,cleaned_data.data_table.describe())
-# print(cleaned_data.data_table.value_counts("Biased"))
 
+c.split_the_data_by_biased()
+print(c.return_the_most_len_mess())
+print(c.return_the_most_common())
+# print(c.chainge_to_json())
 
