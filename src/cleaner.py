@@ -12,8 +12,8 @@ class clean_the_data:
 
 
     def split_the_data_by_biased(self):
-        # since = ["@", "!", "#", "$", "?", ":", ",", ".","/","_"]
-        # self.data_table = self.data_table.replace(since, " ")
+        since = ["@", "!", "#", "$", "?", ":", ",", ".","/","_"]
+        self.data_table = self.data_table.replace(since, " ")
         self.isnt_anti = self.data_table[self.data_table["Biased"]==0]
         self.is_anti =self.data_table[self.data_table["Biased"]==1]
         # print(self.isnt_anti)
@@ -86,26 +86,22 @@ class clean_the_data:
             oppo.append(rt)
         return oppo
 
-
-
     def return_the_most_common(self):
         max1 = []
-        t = 0
         dict_of_common = {}
-        dict_of_upper = {}
         op = self.data_table["Text"].to_string().split(" ")
+
         for i in op:
-            iii = op.is_lower().sum()
-            t+= iii
             if i not in dict_of_common:
                 dict_of_common[i] = 1
-            elif i in dict_of_common:
+            else:
                 dict_of_common[i] += 1
-        for i in range(10):
-            pp = max(dict_of_common.values())
-            max1.append(dict_of_common[pp])
-            # dict_of_common.pop(pp)
-        print(t)
+
+        for _ in range(10):
+            max_word = max(dict_of_common, key=dict_of_common.get)
+            max1.append(max_word)
+            dict_of_common.pop(max_word)
+
         return max1
 
     # def chainge_to_json(self):
